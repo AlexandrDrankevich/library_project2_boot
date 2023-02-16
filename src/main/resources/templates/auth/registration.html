@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<form th:method="POST" th:action="@{/people}" th:object="${person}">
+<form th:method="POST" th:action="@{/registration}" th:object="${person}">
     <label for="name">Введиете имя: </label>
     <input type="text" th:field="*{name}" id="name"/>
     <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
@@ -15,7 +15,11 @@
     <input type="text" th:field="*{birth_date}" id="age"/>
     <div style="color:red" th:if="${#fields.hasErrors('birth_date')}" th:errors="*{birth_date}">Age Error</div>
     <br/>
-        <br/>
+    <label for="password">Введите пароль: </label>
+    <input type="text" th:field="*{password}" id="password"/>
+    <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
+
+    <br/>
     <input type="submit" value="Добавить"/>
 </form>
 

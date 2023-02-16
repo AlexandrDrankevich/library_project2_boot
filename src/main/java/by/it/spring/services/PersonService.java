@@ -3,8 +3,9 @@ package by.it.spring.services;
 import by.it.spring.models.Book;
 import by.it.spring.models.Person;
 import by.it.spring.repositories.PersonRepository;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,11 +17,13 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 public class PersonService {
+    private final PasswordEncoder passwordEncoder;
 
     private final PersonRepository personRepository;
 
     @Autowired
-    public PersonService(PersonRepository personRepository) {
+    public PersonService(PasswordEncoder passwordEncoder, PersonRepository personRepository) {
+        this.passwordEncoder = passwordEncoder;
         this.personRepository = personRepository;
     }
 
@@ -34,11 +37,16 @@ public class PersonService {
 
     @Transactional
     public void save(Person person) {
+       person.setPassword(passwordEncoder.encode(person.getPassword()));
+       person.setRole("ROLE_USER");
         personRepository.save(person);
     }
 
     @Transactional
     public void update(Person updatedPerson) {
+        Person person = personRepository.findById(updatedPerson.getId()).get();
+        updatedPerson.setRole(person.getRole());
+        updatedPerson.setPassword(person.getPassword());
         personRepository.save(updatedPerson);
     }
 
@@ -61,3 +69,4 @@ public class PersonService {
 
     }
 }
+

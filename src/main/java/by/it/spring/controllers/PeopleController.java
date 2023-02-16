@@ -1,7 +1,7 @@
 package by.it.spring.controllers;
 
-import by.it.spring.services.PersonService;
 import by.it.spring.models.Person;
+import by.it.spring.services.PersonService;
 import by.it.spring.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,21 +29,6 @@ public class PeopleController {
         return "people/index";
     }
 
-    @GetMapping("/new")
-    public String newPerson(@ModelAttribute("person") Person person) {
-        return "people/new";
-    }
-
-    @PostMapping()
-    public String create(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) {
-        personValidator.validate(person, bindingResult);
-        if (bindingResult.hasErrors()) {
-            return "people/new";
-        }
-        personService.save(person);
-        return "redirect:/people";
-    }
-
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("person", personService.show(id));
@@ -60,12 +45,12 @@ public class PeopleController {
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") int id, Model model) {
         model.addAttribute("person", personService.show(id));
+        System.out.println("sdsd");
         return "people/edit";
     }
 
     @PatchMapping()
     public String update(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) {
-        personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) {
             return "people/edit";
         }

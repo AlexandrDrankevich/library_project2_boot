@@ -18,15 +18,36 @@ public class Person {
     @Size(min = 2, max = 30, message = "Имя должно быть от 2 до 30 символов длиной")
     @Column(name = "name")
     private String name;
-
     @Min(value = 1900, message = "Год рождения должен быть больше, чем 1900")
     @Column(name = "birth_date")
     private int birth_date;
     @OneToMany(mappedBy = "owner")
     List<Book> books;
+    @Column(name = "password")
+    String password;
+    @Column(name = "role")
+    String role;
+
 
     public Person() {
     }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 
     public List<Book> getBooks() {
         return books;
