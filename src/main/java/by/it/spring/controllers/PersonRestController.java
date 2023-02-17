@@ -31,31 +31,31 @@ public class PersonRestController {
     public PersonRestController(PersonService personService, ModelMapper modelMapper, PersonValidator personValidator) {
         this.personService = personService;
         this.modelMapper = modelMapper;
-        this.personValidator=personValidator;
+        this.personValidator = personValidator;
     }
 
     @GetMapping()
     public List<PersonDTO> getPeople() {
-        return  personService.findAll().stream().map(a->modelMapper.map(a, PersonDTO.class))
+        return personService.findAll().stream().map(a -> modelMapper.map(a, PersonDTO.class))
                 .collect(Collectors.toList());
     }
 
 
     @GetMapping("/{id}")
-    public PersonDTO getPerson(@PathVariable("id")int id) {
-        Person person=personService.show(id);
-        if(person==null){
+    public PersonDTO getPerson(@PathVariable("id") int id) {
+        Person person = personService.show(id);
+        if (person == null) {
             throw new PersonNotFoundException("Person with such id was not found");
         }
-        return  modelMapper.map(person, PersonDTO.class);
+        return modelMapper.map(person, PersonDTO.class);
     }
 
     @PostMapping()
-    public ResponseEntity<HttpStatus> save(@RequestBody @Valid PersonDTO personDTO, BindingResult bindingResult){
+    public ResponseEntity<HttpStatus> save(@RequestBody @Valid PersonDTO personDTO, BindingResult bindingResult) {
         Person person = modelMapper.map(personDTO, Person.class);
-        personValidator.validate(person,bindingResult);
-        if(bindingResult.hasErrors()){
-            StringBuilder stringBuilder=new StringBuilder();
+        personValidator.validate(person, bindingResult);
+        if (bindingResult.hasErrors()) {
+            StringBuilder stringBuilder = new StringBuilder();
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
             for (FieldError fieldError : fieldErrors) {
                 stringBuilder.append(fieldError.getField()).append(":")
@@ -66,16 +66,17 @@ public class PersonRestController {
         personService.save(person);
         return ResponseEntity.ok(HttpStatus.OK);
     }
-@ExceptionHandler
-    public ResponseEntity<PersonErrorResponse> handleException(PersonNotCreatedException ex){
-    PersonErrorResponse personErrorResponse=new PersonErrorResponse(ex.getMessage());
-    return new ResponseEntity<>(personErrorResponse,HttpStatus.BAD_REQUEST);
-}
 
     @ExceptionHandler
-    public ResponseEntity<PersonErrorResponse> handleException(PersonNotFoundException ex){
-        PersonErrorResponse personErrorResponse=new PersonErrorResponse(ex.getMessage());
-        return new ResponseEntity<PersonErrorResponse>(personErrorResponse,HttpStatus.NOT_FOUND);
+    public ResponseEntity<PersonErrorResponse> handleException(PersonNotCreatedException ex) {
+        PersonErrorResponse personErrorResponse = new PersonErrorResponse(ex.getMessage());
+        return new ResponseEntity<>(personErrorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<PersonErrorResponse> handleException(PersonNotFoundException ex) {
+        PersonErrorResponse personErrorResponse = new PersonErrorResponse(ex.getMessage());
+        return new ResponseEntity<>(personErrorResponse, HttpStatus.NOT_FOUND);
     }
 
 
