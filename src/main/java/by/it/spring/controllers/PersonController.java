@@ -13,12 +13,12 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/people")
-public class PeopleController {
+public class PersonController {
     private final PersonService personService;
     private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PersonService personService, PersonValidator personValidator) {
+    public PersonController(PersonService personService, PersonValidator personValidator) {
         this.personService = personService;
         this.personValidator = personValidator;
     }

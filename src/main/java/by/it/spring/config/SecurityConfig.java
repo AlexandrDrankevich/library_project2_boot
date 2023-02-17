@@ -3,6 +3,7 @@ package by.it.spring.config;
 import by.it.spring.services.PersonDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,12 +21,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/","/login", "/registration")
-                .permitAll().anyRequest()
+        http.csrf().disable().authorizeRequests().antMatchers("/", "/login", "/registration", "/people_rest/**")
+                .permitAll().antMatchers(HttpMethod.POST,"/people_rest").permitAll()
+                .anyRequest()
                 .authenticated().and().formLogin()
                 .loginPage("/login").loginProcessingUrl("/process_login")
                 .failureUrl("/login?error")
-                .defaultSuccessUrl("/auth_index",true)
+                .defaultSuccessUrl("/auth_index", true)
                 .permitAll()
                 .and()
                 .logout()
