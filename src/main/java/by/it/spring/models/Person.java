@@ -22,11 +22,11 @@ public class Person {
     @Column(name = "birth_date")
     private int birth_date;
     @OneToMany(mappedBy = "owner")
-    List<Book> books;
+    private List<Book> books;
     @Column(name = "password")
-    String password;
+    private String password;
     @Column(name = "role")
-    String role;
+    private String role;
 
 
     public Person() {
