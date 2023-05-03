@@ -45,12 +45,12 @@ public class PersonController {
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") int id, Model model) {
         model.addAttribute("person", personService.show(id));
-        System.out.println("sdsd");
         return "people/edit";
     }
 
     @PatchMapping()
     public String update(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) {
+        personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) {
             return "people/edit";
         }
