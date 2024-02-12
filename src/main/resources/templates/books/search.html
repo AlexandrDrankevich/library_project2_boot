@@ -22,11 +22,12 @@
         <span th:text="${book.getOwner().getName()}"></span>
     </div>
     </div>
+    <div th:if="${books.isEmpty()}">
+        <span >Книг не найдено</span>
+    </div>
 </div>
 
-<div th:if="${books.isEmpty()}">
-    <span >Книг не найдено</span>
-    </div>
+
 
 </body>
 </html>
